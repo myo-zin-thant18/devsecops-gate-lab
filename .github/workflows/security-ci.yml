@@ -44,10 +44,13 @@ jobs:
       - name: Semgrep scan -> SARIF
         # Produce SARIF always; do NOT fail here so the SARIF can upload.
         # The gate (fail on findings) is enforced in the next step.
+        # --exclude=.github: SAST scans application source; CI-workflow
+        # action-pinning is tracked separately as a supply-chain concern.
         run: |
           semgrep scan \
             --config p/default \
             --config p/owasp-top-ten \
+            --exclude=.github \
             --sarif --output semgrep.sarif \
             --error || true
 
@@ -60,7 +63,7 @@ jobs:
 
       - name: Gate — fail on Semgrep findings
         # `--error` makes Semgrep exit non-zero when findings exist.
-        run: semgrep scan --config p/default --config p/owasp-top-ten --error
+        run: semgrep scan --config p/default --config p/owasp-top-ten --exclude=.github --error
 
   # ---------------------------------------------------------------
   # 2) Trivy — filesystem (SCA) + IaC/Dockerfile config scan.

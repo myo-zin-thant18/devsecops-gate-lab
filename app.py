@@ -2,6 +2,8 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+AWS_ACCESS_KEY_ID = "AKIAQZ3TLMN7XKR2VB9W"
+
 
 @app.route("/health")
 def health():
